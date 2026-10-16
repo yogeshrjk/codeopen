@@ -1,0 +1,198 @@
+{
+  "name": "codeopen",
+  "displayName": "CodeOpen",
+  "description": "Own chat panel for the OpenCode CLI — verified free models only.",
+  "version": "1.1.0",
+  "publisher": "YogeshRajak",
+  "author": "Yogesh Rajak",
+  "icon": "assets/icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yogeshrjk/codeopen"
+  },
+  "engines": {
+    "vscode": "^1.90.0",
+    "node": ">=18"
+  },
+  "categories": [
+    "AI",
+    "Chat",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "ai",
+    "chat",
+    "opencode",
+    "coding-agent",
+    "codeopen"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished",
+    "onView:freecli.main"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "freecli",
+          "title": "CodeOpen",
+          "icon": "assets/activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "freecli": [
+        {
+          "id": "freecli.main",
+          "name": "CodeOpen",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "freecli.selectModel",
+        "title": "CodeOpen: Select Model",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "freecli.newSession",
+        "title": "CodeOpen: New Conversation",
+        "icon": "$(add)"
+      },
+      {
+        "command": "freecli.showHistory",
+        "title": "CodeOpen: Conversation History",
+        "icon": "$(history)"
+      },
+      {
+        "command": "freecli.retryDetection",
+        "title": "CodeOpen: Retry CLI Detection",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "freecli.showDiagnostics",
+        "title": "CodeOpen: Show Diagnostics"
+      },
+      {
+        "command": "freecli.reviewPatch",
+        "title": "CodeOpen: Review Proposed Changes",
+        "icon": "$(diff)"
+      },
+      {
+        "command": "freecli.applyPatch",
+        "title": "CodeOpen: Apply Approved Changes"
+      },
+      {
+        "command": "freecli.rejectPatch",
+        "title": "CodeOpen: Reject Proposed Changes"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "freecli.newSession",
+          "when": "view == freecli.main",
+          "group": "navigation@1"
+        },
+        {
+          "command": "freecli.reviewPatch",
+          "when": "view == freecli.main",
+          "group": "navigation@2"
+        },
+        {
+          "command": "freecli.retryDetection",
+          "when": "view == freecli.main",
+          "group": "navigation"
+        },
+        {
+          "command": "freecli.showHistory",
+          "when": "view == freecli.main",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CodeOpen",
+      "properties": {
+        "freecli.opencodePath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path to the OpenCode executable (e.g. /Users/you/.opencode/bin/opencode). Empty = auto-detect via PATH."
+        },
+        "freecli.patchMode": {
+          "type": "string",
+          "enum": [
+            "reviewBeforeApply",
+            "directEdit"
+          ],
+          "default": "reviewBeforeApply",
+          "description": "reviewBeforeApply isolates changes until you approve. directEdit lets the CLI edit the workspace directly (warns; review after)."
+        },
+        "freecli.requirePatchApproval": {
+          "type": "boolean",
+          "default": true,
+          "description": "Require explicit approval before applying proposed changes."
+        },
+        "freecli.autoDetectInstallation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Detect CLI installations on activation."
+        },
+        "freecli.modelCatalogCacheDuration": {
+          "type": "number",
+          "default": 3600,
+          "description": "Model catalog cache lifetime in seconds."
+        },
+        "freecli.requestTimeoutSec": {
+          "type": "number",
+          "default": 300,
+          "description": "Stop a chat run if the CLI produces no output for this many seconds. Active output resets the timer; 0 disables it."
+        },
+        "freecli.firstByteNoticeSec": {
+          "type": "number",
+          "default": 30,
+          "description": "Show a 'still waiting' notice if the CLI emits no output within this many seconds. 0 disables."
+        },
+        "freecli.maxContextCharacters": {
+          "type": "number",
+          "default": 8000,
+          "description": "Maximum characters of editor context sent with a chat request."
+        },
+        "freecli.includeSurroundingCode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include enclosing function/imports around the selection when available."
+        },
+        "freecli.showToolActivity": {
+          "type": "boolean",
+          "default": true,
+          "description": "Render CLI tool activity (file reads, edits) in chat."
+        },
+        "freecli.preserveSessions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Persist minimal session metadata (CLI, model, CLI session id, workspace) across reloads."
+        },
+        "freecli.webSearchEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Wikipedia-based web search references for chat queries to provide up-to-date and accurate information."
+        },
+        "freecli.debugLogging": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging to the CodeOpen output channel. Never logs secrets."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "lint": "node --check src/extension.js",
+    "package": "npx --yes @vscode/vsce package --no-dependencies",
+    "vscode:prepublish": "npm test"
+  }
+}

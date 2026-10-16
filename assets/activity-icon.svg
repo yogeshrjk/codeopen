@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Dark outer frame with transparent interior -->
+  <path fill="#222222" fill-rule="evenodd" d="M24 8H104V120H24Z M40 24V104H88V24Z"></path>
+
+  <!-- Light gray lower section -->
+  <path fill="#D0CECE" d="M40 56H88V104H40Z"></path>
+</svg>
